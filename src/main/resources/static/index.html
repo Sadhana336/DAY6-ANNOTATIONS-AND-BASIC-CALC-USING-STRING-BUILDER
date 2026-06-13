@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scientific Calculator</title>
+
+    <style>
+        body{
+            margin:0;
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background:linear-gradient(135deg,#667eea,#764ba2);
+            font-family:Arial,sans-serif;
+        }
+
+        .container{
+            background:white;
+            padding:30px;
+            border-radius:15px;
+            box-shadow:0 0 15px rgba(0,0,0,0.3);
+            text-align:center;
+            width:350px;
+        }
+
+        h1{
+            color:#333;
+            margin-bottom:20px;
+        }
+
+        input,
+        select{
+            width:90%;
+            padding:10px;
+            margin:10px 0;
+            border:1px solid #ccc;
+            border-radius:8px;
+            font-size:16px;
+        }
+
+        button{
+            width:95%;
+            padding:12px;
+            border:none;
+            border-radius:8px;
+            background:#4CAF50;
+            color:white;
+            font-size:16px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#45a049;
+        }
+
+        #answer{
+            margin-top:20px;
+            color:#2196F3;
+            font-size:22px;
+            font-weight:bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Scientific Calculator</h1>
+
+    <input type="number" id="num1" placeholder="First Number">
+
+    <input type="number" id="num2" placeholder="Second Number">
+
+    <select id="type">
+        <option value="add">Addition</option>
+        <option value="sub">Subtraction</option>
+        <option value="mul">Multiplication</option>
+        <option value="div">Division</option>
+        <option value="sqrt">Square Root</option>
+        <option value="square">Square</option>
+        <option value="sin">Sin</option>
+        <option value="log">Log10</option>
+        <option value="round">Round</option>
+    </select>
+
+    <button onclick="calculate()">Calculate</button>
+
+    <h2 id="answer"></h2>
+
+</div>
+
+<script>
+    // async keyword makes this function asynchronous.
+    // It allows us to use "await" inside the function.
+    // The function will return a Promise automatically.
+    async function calculate() {
+
+        // Get value entered in input field with id="num1"
+        let a = document.getElementById("num1").value;
+
+        // Get value entered in input field with id="num2"
+        let b = document.getElementById("num2").value;
+
+        // Get selected operation type (add, sub, mul, div etc.)
+        let type = document.getElementById("type").value;
+
+        // fetch() is used to send a request to a server (HTTP request).
+        // Here it sends a GET request to backend at localhost:8080
+        // It returns a Promise (response will come later).
+        const response = await fetch(
+            `http://localhost:8080/calc/${type}/${a}/${b}`
+        );
+        // await pauses execution of this function
+        // until the fetch request is completed and response is received.
+
+        // response.text() reads the body of the response as plain text.
+        // It also returns a Promise.
+        const result = await response.text();
+        // await waits until the result text is fully received.
+
+        // Display the final result inside the element with id="answer"
+        document.getElementById("answer").innerHTML =
+            "Result = " + result;
+    }
+</script>
+
+</body>
+</html>
